@@ -46,9 +46,17 @@ public class MyServer {
         }
     }
 
+    public synchronized void privateMsg(String name, String msg){
+        for (ClientHandler clientHandler: clients) {
+            if(clientHandler.getName().equals(name)) {
+                clientHandler.sendMsg(msg);
+            }
+        }
+    }
+
     public synchronized boolean isNickBusy(String nick){
         for (ClientHandler clientHandler : clients) {
-            if (clientHandler.getClass().equals(nick)){
+            if (clientHandler.getName().equals(nick)){
                 return  true;
             }
         }

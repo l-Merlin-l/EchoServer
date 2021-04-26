@@ -27,7 +27,7 @@ public class ClientHandler {
                 }finally {
                     closeConnection();
                 }
-            });
+            }).start();
         }catch (IOException e){
             e.printStackTrace();
         }
@@ -47,6 +47,7 @@ public class ClientHandler {
                         name = nick;
                         server.broadcastMsg(name + " зашел в чат");
                         server.subscribe(this);
+                        return;
                     }else {
                         sendMsg("Ник занят");
                     }
@@ -70,11 +71,19 @@ public class ClientHandler {
     public void readMsg () throws IOException{
         while (true){
             String strFormClient = in.readUTF();
-            System.out.println(name + ": " + strFormClient);
-            if (strFormClient.equals("/end")){
-                return;
+
+            if(strFormClient.startsWith("/w ")){
+                strFormClient = strFormClient.replace("/w ", "");
+                String fromName = strFormClient.substring(0, strFormClient.indexOf(" "));
+                strFormClient = strFormClient.replace(fromName+" ", "");
+                server.privateMsg(fromName, "Личное сообщение от " + name + ": " + strFormClient );
+            }else {
+                System.out.println(name + ": " + strFormClient);
+                if (strFormClient.equals("/end")) {
+                    return;
+                }
+                server.broadcastMsg(name + ": " + strFormClient);
             }
-            server.broadcastMsg(name + ": " + strFormClient);
         }
     }
 
