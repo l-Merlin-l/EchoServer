@@ -1,4 +1,4 @@
-package ru.geekbrains.JavaCore2;
+package ru.geekbrains.JavaCore2.chat1;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -24,7 +24,7 @@ public class WriteClient extends Thread{
                 }
             }
         }catch (IOException e){
-            System.out.println(e.fillInStackTrace());
+            e.fillInStackTrace();
         }
     }
 }

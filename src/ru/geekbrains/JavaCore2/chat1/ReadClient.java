@@ -1,4 +1,4 @@
-package ru.geekbrains.JavaCore2;
+package ru.geekbrains.JavaCore2.chat1;
 
 import java.io.DataInputStream;
 import java.io.IOException;
