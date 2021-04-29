@@ -46,10 +46,12 @@ public class MyServer {
         }
     }
 
-    public synchronized void privateMsg(String name, String msg){
+    public synchronized void privateMsg(String name, String fromName, String msg){
         for (ClientHandler clientHandler: clients) {
             if(clientHandler.getName().equals(name)) {
-                clientHandler.sendMsg(msg);
+                clientHandler.sendMsg("Личное сообщение от " + name + ": " + msg);
+            }else if(clientHandler.getName().equals(fromName)){
+                clientHandler.sendMsg("Личное сообщение для " + fromName + ": " + msg);
             }
         }
     }

@@ -76,7 +76,7 @@ public class ClientHandler {
                 strFormClient = strFormClient.replace("/w ", "");
                 String fromName = strFormClient.substring(0, strFormClient.indexOf(" "));
                 strFormClient = strFormClient.replace(fromName+" ", "");
-                server.privateMsg(fromName, "Личное сообщение от " + name + ": " + strFormClient );
+                server.privateMsg(name, fromName, strFormClient );
             }else {
                 System.out.println(name + ": " + strFormClient);
                 if (strFormClient.equals("/end")) {
