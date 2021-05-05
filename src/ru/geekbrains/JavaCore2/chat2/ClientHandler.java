@@ -25,7 +25,7 @@ public class ClientHandler {
                 }catch (IOException e){
                     e.printStackTrace();
                 }finally {
-                    closeConnection();
+                    closeUser();
                 }
             }).start();
         }catch (IOException e){
@@ -34,7 +34,19 @@ public class ClientHandler {
     }
     
     private void auth() throws IOException{
-        while (true){
+        Thread thread = new Thread(() -> {
+            try {
+                Thread.sleep(120000);
+                sendMsg("Вы отключены за превышение времени ожидания подключения к серверу");
+                sendMsg("/end");
+                closeConnection();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+        thread.setDaemon(true);
+        thread.start();
+        while (socket.isConnected()){
             String str = in.readUTF();
             if(str.startsWith("/auth")){
                 String [] parts = str.split(" ");
@@ -47,6 +59,7 @@ public class ClientHandler {
                         name = nick;
                         server.broadcastMsg(name + " зашел в чат");
                         server.subscribe(this);
+                        thread.stop();
                         return;
                     }else {
                         sendMsg("Ник занят");
@@ -87,9 +100,13 @@ public class ClientHandler {
         }
     }
 
-    public void closeConnection() {
+    public void closeUser(){
         server.unsubscribe(this);
         server.broadcastMsg(name + " вышел из чата");
+        closeConnection();
+    }
+
+    public void closeConnection() {
         try {
             in.close();
         } catch (IOException e) {
